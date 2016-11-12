@@ -1,4 +1,4 @@
-﻿namespace CSC741M_MP2
+﻿namespace CSC741M_MP2.View
 {
     partial class MainView
     {
@@ -31,12 +31,12 @@
             this.components = new System.ComponentModel.Container();
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
             this.filePathLabel = new MetroFramework.Controls.MetroLabel();
-            this.browseButton = new MetroFramework.Controls.MetroButton();
-            this.metroPanel1 = new MetroFramework.Controls.MetroPanel();
+            this.inputBrowseButton = new MetroFramework.Controls.MetroButton();
+            this.shotBoundaryPanel = new MetroFramework.Controls.MetroPanel();
             this.metroTabs = new MetroFramework.Controls.MetroTabControl();
             this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
-            this.metroProgressBar1 = new MetroFramework.Controls.MetroProgressBar();
-            this.metroPanel2 = new MetroFramework.Controls.MetroPanel();
+            this.processProgressBar = new MetroFramework.Controls.MetroProgressBar();
+            this.keyframePanel = new MetroFramework.Controls.MetroPanel();
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.shotBoundariesLabel = new MetroFramework.Controls.MetroLabel();
             this.runButton = new MetroFramework.Controls.MetroButton();
@@ -70,30 +70,30 @@
             this.filePathLabel.Text = "Click Browse to look for file/folder";
             this.filePathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // browseButton
+            // inputBrowseButton
             // 
-            this.browseButton.Location = new System.Drawing.Point(108, 7);
-            this.browseButton.Name = "browseButton";
-            this.browseButton.Size = new System.Drawing.Size(86, 29);
-            this.browseButton.TabIndex = 1;
-            this.browseButton.Text = "Browse";
-            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+            this.inputBrowseButton.Location = new System.Drawing.Point(108, 7);
+            this.inputBrowseButton.Name = "inputBrowseButton";
+            this.inputBrowseButton.Size = new System.Drawing.Size(86, 29);
+            this.inputBrowseButton.TabIndex = 1;
+            this.inputBrowseButton.Text = "Browse";
+            this.inputBrowseButton.Click += new System.EventHandler(this.inputBrowseButton_Click);
             // 
-            // metroPanel1
+            // shotBoundaryPanel
             // 
-            this.metroPanel1.AutoScroll = true;
-            this.metroPanel1.HorizontalScrollbar = true;
-            this.metroPanel1.HorizontalScrollbarBarColor = true;
-            this.metroPanel1.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroPanel1.HorizontalScrollbarSize = 10;
-            this.metroPanel1.Location = new System.Drawing.Point(3, 65);
-            this.metroPanel1.Name = "metroPanel1";
-            this.metroPanel1.Size = new System.Drawing.Size(665, 148);
-            this.metroPanel1.TabIndex = 2;
-            this.metroPanel1.VerticalScrollbar = true;
-            this.metroPanel1.VerticalScrollbarBarColor = true;
-            this.metroPanel1.VerticalScrollbarHighlightOnWheel = false;
-            this.metroPanel1.VerticalScrollbarSize = 10;
+            this.shotBoundaryPanel.AutoScroll = true;
+            this.shotBoundaryPanel.HorizontalScrollbar = true;
+            this.shotBoundaryPanel.HorizontalScrollbarBarColor = true;
+            this.shotBoundaryPanel.HorizontalScrollbarHighlightOnWheel = false;
+            this.shotBoundaryPanel.HorizontalScrollbarSize = 10;
+            this.shotBoundaryPanel.Location = new System.Drawing.Point(3, 65);
+            this.shotBoundaryPanel.Name = "shotBoundaryPanel";
+            this.shotBoundaryPanel.Size = new System.Drawing.Size(665, 148);
+            this.shotBoundaryPanel.TabIndex = 2;
+            this.shotBoundaryPanel.VerticalScrollbar = true;
+            this.shotBoundaryPanel.VerticalScrollbarBarColor = true;
+            this.shotBoundaryPanel.VerticalScrollbarHighlightOnWheel = false;
+            this.shotBoundaryPanel.VerticalScrollbarSize = 10;
             // 
             // metroTabs
             // 
@@ -102,21 +102,21 @@
             this.metroTabs.Controls.Add(this.metroTabPage3);
             this.metroTabs.Location = new System.Drawing.Point(23, 63);
             this.metroTabs.Name = "metroTabs";
-            this.metroTabs.SelectedIndex = 1;
+            this.metroTabs.SelectedIndex = 0;
             this.metroTabs.Size = new System.Drawing.Size(679, 482);
             this.metroTabs.TabIndex = 3;
             // 
             // metroTabPage1
             // 
-            this.metroTabPage1.Controls.Add(this.metroProgressBar1);
-            this.metroTabPage1.Controls.Add(this.metroPanel2);
+            this.metroTabPage1.Controls.Add(this.processProgressBar);
+            this.metroTabPage1.Controls.Add(this.keyframePanel);
             this.metroTabPage1.Controls.Add(this.metroLabel2);
             this.metroTabPage1.Controls.Add(this.shotBoundariesLabel);
             this.metroTabPage1.Controls.Add(this.runButton);
             this.metroTabPage1.Controls.Add(this.fileTypeComboBox);
-            this.metroTabPage1.Controls.Add(this.metroPanel1);
+            this.metroTabPage1.Controls.Add(this.shotBoundaryPanel);
             this.metroTabPage1.Controls.Add(this.filePathLabel);
-            this.metroTabPage1.Controls.Add(this.browseButton);
+            this.metroTabPage1.Controls.Add(this.inputBrowseButton);
             this.metroTabPage1.HorizontalScrollbarBarColor = true;
             this.metroTabPage1.Location = new System.Drawing.Point(4, 35);
             this.metroTabPage1.Name = "metroTabPage1";
@@ -125,28 +125,28 @@
             this.metroTabPage1.Text = "Home";
             this.metroTabPage1.VerticalScrollbarBarColor = true;
             // 
-            // metroProgressBar1
+            // processProgressBar
             // 
-            this.metroProgressBar1.Location = new System.Drawing.Point(3, 417);
-            this.metroProgressBar1.Name = "metroProgressBar1";
-            this.metroProgressBar1.Size = new System.Drawing.Size(665, 23);
-            this.metroProgressBar1.TabIndex = 7;
+            this.processProgressBar.Location = new System.Drawing.Point(3, 417);
+            this.processProgressBar.Name = "processProgressBar";
+            this.processProgressBar.Size = new System.Drawing.Size(665, 23);
+            this.processProgressBar.TabIndex = 7;
             // 
-            // metroPanel2
+            // keyframePanel
             // 
-            this.metroPanel2.AutoScroll = true;
-            this.metroPanel2.HorizontalScrollbar = true;
-            this.metroPanel2.HorizontalScrollbarBarColor = true;
-            this.metroPanel2.HorizontalScrollbarHighlightOnWheel = false;
-            this.metroPanel2.HorizontalScrollbarSize = 10;
-            this.metroPanel2.Location = new System.Drawing.Point(3, 249);
-            this.metroPanel2.Name = "metroPanel2";
-            this.metroPanel2.Size = new System.Drawing.Size(665, 148);
-            this.metroPanel2.TabIndex = 3;
-            this.metroPanel2.VerticalScrollbar = true;
-            this.metroPanel2.VerticalScrollbarBarColor = true;
-            this.metroPanel2.VerticalScrollbarHighlightOnWheel = false;
-            this.metroPanel2.VerticalScrollbarSize = 10;
+            this.keyframePanel.AutoScroll = true;
+            this.keyframePanel.HorizontalScrollbar = true;
+            this.keyframePanel.HorizontalScrollbarBarColor = true;
+            this.keyframePanel.HorizontalScrollbarHighlightOnWheel = false;
+            this.keyframePanel.HorizontalScrollbarSize = 10;
+            this.keyframePanel.Location = new System.Drawing.Point(3, 249);
+            this.keyframePanel.Name = "keyframePanel";
+            this.keyframePanel.Size = new System.Drawing.Size(665, 148);
+            this.keyframePanel.TabIndex = 3;
+            this.keyframePanel.VerticalScrollbar = true;
+            this.keyframePanel.VerticalScrollbarBarColor = true;
+            this.keyframePanel.VerticalScrollbarHighlightOnWheel = false;
+            this.keyframePanel.VerticalScrollbarSize = 10;
             // 
             // metroLabel2
             // 
@@ -186,6 +186,7 @@
             this.fileTypeComboBox.Name = "fileTypeComboBox";
             this.fileTypeComboBox.Size = new System.Drawing.Size(99, 29);
             this.fileTypeComboBox.TabIndex = 3;
+            this.fileTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.fileTypeComboBox_SelectedIndexChanged);
             // 
             // metroTabPage2
             // 
@@ -279,17 +280,17 @@
         #endregion
 
         private MetroFramework.Components.MetroStyleManager metroStyleManager1;
-        private MetroFramework.Controls.MetroButton browseButton;
+        private MetroFramework.Controls.MetroButton inputBrowseButton;
         private MetroFramework.Controls.MetroLabel filePathLabel;
-        private MetroFramework.Controls.MetroPanel metroPanel1;
+        private MetroFramework.Controls.MetroPanel shotBoundaryPanel;
         private MetroFramework.Controls.MetroTabControl metroTabs;
         private MetroFramework.Controls.MetroTabPage metroTabPage1;
         private MetroFramework.Controls.MetroTabPage metroTabPage2;
         private MetroFramework.Controls.MetroTabPage metroTabPage3;
         private MetroFramework.Controls.MetroComboBox fileTypeComboBox;
         private MetroFramework.Controls.MetroLabel metroLabel1;
-        private MetroFramework.Controls.MetroProgressBar metroProgressBar1;
-        private MetroFramework.Controls.MetroPanel metroPanel2;
+        private MetroFramework.Controls.MetroProgressBar processProgressBar;
+        private MetroFramework.Controls.MetroPanel keyframePanel;
         private MetroFramework.Controls.MetroLabel metroLabel2;
         private MetroFramework.Controls.MetroLabel shotBoundariesLabel;
         private MetroFramework.Controls.MetroButton runButton;
