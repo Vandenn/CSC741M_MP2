@@ -12,11 +12,11 @@ using System.IO;
 
 namespace CSC741M_MP2
 {
-    public partial class Main : MetroForm
+    public partial class MainView : MetroForm
     {
         private string currentPath;
 
-        public Main()
+        public MainView()
         {
             InitializeComponent();
 
@@ -58,6 +58,31 @@ namespace CSC741M_MP2
                     filePathLabel.Text = currentPath;
                 }
             }
+        }
+
+        private void runButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void defaultSearchPathBrowseButton_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog browser = new FolderBrowserDialog();
+            browser.Description = "Set Default Search Path";
+            browser.SelectedPath = @"C:\";
+            browser.ShowNewFolderButton = false;
+
+            if (browser.ShowDialog() == DialogResult.OK)
+            {
+                currentPath = browser.SelectedPath.ToString();
+                if (!currentPath.EndsWith("\\")) currentPath = currentPath + "\\";
+                defaultSearchPathTextBox.Text = currentPath;
+            }
+        }
+
+        private void saveSettingsButton_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
