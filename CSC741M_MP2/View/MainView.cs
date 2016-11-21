@@ -18,7 +18,12 @@ namespace CSC741M_MP2.View
         private readonly string noFilePathChosen = "Click Browse to look for file/folder";
 
         private MainPresenter mainPresenter;
+        private BackgroundWorker shotBoundaryWorker;
+        private BackgroundWorker keyframeWorker;
         private string currentPath;
+
+        private List<PictureBox> shotBoundaryPictureBoxes;
+        private List<PictureBox> keyframePictureBoxes;
 
         public MainView()
         {
@@ -29,6 +34,24 @@ namespace CSC741M_MP2.View
 
             /// Property Initialization
             currentPath = "";
+            shotBoundaryPictureBoxes = new List<PictureBox>();
+            keyframePictureBoxes = new List<PictureBox>();
+
+            /// Background Worker Initialization
+            shotBoundaryWorker = new BackgroundWorker();
+            shotBoundaryWorker.DoWork += new DoWorkEventHandler(shotBoundary_DoWork);
+            shotBoundaryWorker.ProgressChanged += new ProgressChangedEventHandler
+                    (shotBoundary_ProgressChanged);
+            shotBoundaryWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler
+                    (shotBoundary_RunWorkerCompleted);
+            shotBoundaryWorker.WorkerReportsProgress = true;
+            keyframeWorker = new BackgroundWorker();
+            keyframeWorker.DoWork += new DoWorkEventHandler(keyframe_DoWork);
+            keyframeWorker.ProgressChanged += new ProgressChangedEventHandler
+                    (keyframe_ProgressChanged);
+            keyframeWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler
+                    (keyframe_RunWorkerCompleted);
+            keyframeWorker.WorkerReportsProgress = true;
 
             /// UI Initialization
             filePathLabel.Text = noFilePathChosen;
@@ -90,22 +113,70 @@ namespace CSC741M_MP2.View
             defaultSearchPathTextBox.Text = defaultSearchPath;
         }
 
-        public void addShotBoundaryResult(PictureBox image)
+        public void fillShotBoundaryPanel(List<string> shotBoundaries)
         {
-            shotBoundaryPanel.Controls.Add(image);
+            clearShotBoundaryPanel();
+            shotBoundaryWorker.RunWorkerAsync(shotBoundaries);
         }
 
-        public void addKeyframeResult(PictureBox image)
+        public void fillKeyframePanel(List<string> keyframes)
         {
-            keyframePanel.Controls.Add(image);
+            clearKeyframePanel();
+            keyframeWorker.RunWorkerAsync(keyframes);
+        }
+        #endregion
+
+        #region Background Worker Functions
+        private void shotBoundary_DoWork(object sender, DoWorkEventArgs e)
+        {
+            List<String> results = (List<String>)e.Argument;
+            int x = 5;
+            int y = 5;
+            foreach (string path in results)
+            {
+                PictureBox picture = new PictureBox();
+                picture.Image = Image.FromFile(path);
+                picture.Location = new Point(x, y);
+                picture.SizeMode = PictureBoxSizeMode.StretchImage;
+                x += picture.Width + 5;
+                shotBoundaryWorker.ReportProgress(0, picture);
+            }
         }
 
-        public void clearShotBoundaryResults()
+        private void shotBoundary_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            shotBoundaryPictureBoxes.Add((PictureBox)e.UserState);
+            shotBoundaryPanel.Controls.Add((PictureBox)e.UserState);
+        }
+
+        private void shotBoundary_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
         }
 
-        public void clearKeyframeResults()
+        private void keyframe_DoWork(object sender, DoWorkEventArgs e)
+        {
+            List<String> results = (List<String>)e.Argument;
+            int x = 5;
+            int y = 5;
+            foreach (string path in results)
+            {
+                PictureBox picture = new PictureBox();
+                picture.Image = Image.FromFile(path);
+                picture.Location = new Point(x, y);
+                picture.SizeMode = PictureBoxSizeMode.StretchImage;
+                x += picture.Width + 5;
+                keyframeWorker.ReportProgress(0, picture);
+            }
+        }
+
+        private void keyframe_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            keyframePictureBoxes.Add((PictureBox)e.UserState);
+            keyframePanel.Controls.Add((PictureBox)e.UserState);
+        }
+
+        private void keyframe_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
 
         }
@@ -126,6 +197,24 @@ namespace CSC741M_MP2.View
         private void runButton_Click(object sender, EventArgs e)
         {
             mainPresenter.runButtonClickHandler(fileTypeComboBox.SelectedIndex, currentPath);
+        }
+
+        private void clearShotBoundaryPanel()
+        {
+            for (int i = shotBoundaryPictureBoxes.Count - 1; i >= 0; i--)
+            {
+                shotBoundaryPictureBoxes[i].Dispose();
+                shotBoundaryPictureBoxes.RemoveAt(i);
+            }
+        }
+
+        private void clearKeyframePanel()
+        {
+            for (int i = keyframePictureBoxes.Count - 1; i >= 0; i--)
+            {
+                keyframePictureBoxes[i].Dispose();
+                keyframePictureBoxes.RemoveAt(i);
+            }
         }
         #endregion
 

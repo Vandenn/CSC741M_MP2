@@ -18,9 +18,7 @@ namespace CSC741M_MP2.Presenter
         private IMainView view;
         private Settings settings;
 
-        private BackgroundWorker processWorker;
-        private BackgroundWorker shotBoundaryWorker;
-        private BackgroundWorker keyframeWorker;
+        private BackgroundWorker processWorker; 
 
         private List<string> shotBoundaries;
         private List<string> keyframes;
@@ -43,21 +41,7 @@ namespace CSC741M_MP2.Presenter
                     (process_ProgressChanged);
             processWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler
                     (process_RunWorkerCompleted);
-            processWorker.WorkerReportsProgress = true;
-            shotBoundaryWorker = new BackgroundWorker();
-            shotBoundaryWorker.DoWork += new DoWorkEventHandler(shotBoundary_DoWork);
-            shotBoundaryWorker.ProgressChanged += new ProgressChangedEventHandler
-                    (shotBoundary_ProgressChanged);
-            shotBoundaryWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler
-                    (shotBoundary_RunWorkerCompleted);
-            shotBoundaryWorker.WorkerReportsProgress = true;
-            keyframeWorker = new BackgroundWorker();
-            keyframeWorker.DoWork += new DoWorkEventHandler(keyframe_DoWork);
-            keyframeWorker.ProgressChanged += new ProgressChangedEventHandler
-                    (keyframe_ProgressChanged);
-            keyframeWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler
-                    (keyframe_RunWorkerCompleted);
-            keyframeWorker.WorkerReportsProgress = true;
+            processWorker.WorkerReportsProgress = true; 
         }
 
         #region BackgroundWorker Functions
@@ -99,61 +83,9 @@ namespace CSC741M_MP2.Presenter
 
         private void process_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            shotBoundaryWorker.RunWorkerAsync(shotBoundaries);
-            keyframeWorker.RunWorkerAsync(keyframes);
+            view.fillShotBoundaryPanel(shotBoundaries);
+            view.fillKeyframePanel(keyframes);
             view.setUIEnabled(true);
-        }
-
-        private void shotBoundary_DoWork(object sender, DoWorkEventArgs e)
-        {
-            List<String> results = (List<String>)e.Argument;
-            int x = 5;
-            int y = 5;
-            foreach (string path in results)
-            {
-                PictureBox picture = new PictureBox();
-                picture.Image = Image.FromFile(path);
-                picture.Location = new Point(x, y);
-                picture.SizeMode = PictureBoxSizeMode.StretchImage;
-                x += picture.Width + 5;
-                shotBoundaryWorker.ReportProgress(0, picture);
-            }
-        }
-
-        private void shotBoundary_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            view.addShotBoundaryResult((PictureBox)e.UserState);
-        }
-
-        private void shotBoundary_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
-        }
-
-        private void keyframe_DoWork(object sender, DoWorkEventArgs e)
-        {
-            List<String> results = (List<String>)e.Argument;
-            int x = 5;
-            int y = 5;
-            foreach (string path in results)
-            {
-                PictureBox picture = new PictureBox();
-                picture.Image = Image.FromFile(path);
-                picture.Location = new Point(x, y);
-                picture.SizeMode = PictureBoxSizeMode.StretchImage;
-                x += picture.Width + 5;
-                keyframeWorker.ReportProgress(0, picture);
-            }
-        }
-
-        private void keyframe_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            view.addKeyframeResult((PictureBox)e.UserState);
-        }
-
-        private void keyframe_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-
         }
         #endregion
 
