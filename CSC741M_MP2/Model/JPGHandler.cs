@@ -122,7 +122,10 @@ namespace CSC741M_MP2.Model
                         {
                             if (possibleTransitionEndIndex >= 0)
                             {
-                                shotBoundaryPaths.Add(imagePaths[possibleTransitionEndIndex]);
+                                if (!shotBoundaryPaths.Contains(imagePaths[possibleTransitionEndIndex]))
+                                    shotBoundaryPaths.Add(imagePaths[possibleTransitionEndIndex]);
+                                else //Remove single frame "transitions"
+                                    shotBoundaryPaths.Remove(imagePaths[possibleTransitionEndIndex]);
                                 possibleTransitionEndIndex = -1;
                             }
                             inTransition = false;
@@ -138,6 +141,7 @@ namespace CSC741M_MP2.Model
                 shotBoundaryPaths.Add(imagePaths[imagePaths.Count - 1]);
 
             ProgressUpdate(100);
+            shotBoundaryPaths.Sort();
             return shotBoundaryPaths;
         }
 

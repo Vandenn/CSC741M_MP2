@@ -2,5 +2,5 @@
 <settings>
   <defaultSearchPath>C:\</defaultSearchPath>
   <constantAValue>6.0</constantAValue>
-  <postTransitionFrameTolerance>30</postTransitionFrameTolerance>
+  <postTransitionFrameTolerance>5</postTransitionFrameTolerance>
 </settings>
