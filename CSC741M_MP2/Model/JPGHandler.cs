@@ -29,7 +29,6 @@ namespace CSC741M_MP2.Model
         {
             Bitmap image = new Bitmap(path);
             LockBitmap lbmp = new LockBitmap(image);
-            Color[,] convertedImage = new Color[image.Height, image.Width];
             Dictionary<int, int> histogram = new Dictionary<int, int>();
 
             lbmp.LockBits();
@@ -37,8 +36,8 @@ namespace CSC741M_MP2.Model
             {
                 for (int j = 0; j < image.Width; j++)
                 {
-                    convertedImage[i, j] = lbmp.GetPixel(j, i);
-                    int key = (convertedImage[i, j].R ^ 48) + ((convertedImage[i, j].G ^ 48) >> 2) + ((convertedImage[i, j].B ^ 48) >> 4);
+                    Color c = lbmp.GetPixel(j, i);
+                    int key = (c.R ^ 48) + ((c.G ^ 48) >> 2) + ((c.B ^ 48) >> 4);
                     if (histogram.ContainsKey(key))
                     {
                         histogram[key] += 1;
@@ -60,26 +59,54 @@ namespace CSC741M_MP2.Model
             // Implementation here.
             shotBoundaryPaths = Directory.GetFiles(path).Where(p => p.EndsWith(".jpg") || p.EndsWith(".jpeg")).Take(10).ToList();
             Dictionary<int, int> histogram1, histogram2;
-            double similarity;
+            double[] similarity = new double[shotBoundaryPaths.Count-1];
             List<string> results = new List<string>();
-            string p;
+            string temp;
 
             for (int i = 0; i < shotBoundaryPaths.Count - 1; i++)
             {
-                p = shotBoundaryPaths[i];
-                histogram1 = convertImage(p);
+                temp = shotBoundaryPaths[i];
+                histogram1 = convertImage(temp);
 
-                p = shotBoundaryPaths[i + 1];
-                histogram2 = convertImage(p);
+                temp = shotBoundaryPaths[i + 1];
+                histogram2 = convertImage(temp);
 
-                similarity = getDifference(histogram1, histogram2);
+                similarity[i] = getDifference(histogram1, histogram2);
 
-                double similarityThreshold = 0.3;
-                if (similarity < similarityThreshold)
-                {
+            }
+
+            Boolean inTransition = false;
+            int countShotsAfterTransition = 0;
+
+            for (int i = 0; i < similarity.Length; i++)
+            {
+                double similarityThreshold = 0.75;
+                double transitionTreshold = 0.30;
+                int shotsThreshold = 10;
+                if (similarity[i] > similarityThreshold)
+                { //abrupt transition
                     results.Add(shotBoundaryPaths[i + 1]);
                 }
-
+                else if (similarity[i] > transitionTreshold)
+                {
+                    if (!inTransition)
+                    {
+                        inTransition = true;
+                    }
+                    else
+                    {
+                        countShotsAfterTransition = 1;
+                    }
+                }
+                else if (inTransition && countShotsAfterTransition < shotsThreshold)
+                {
+                    countShotsAfterTransition++;
+                }
+                else if (inTransition)
+                {
+                    results.Add(shotBoundaryPaths[i - shotsThreshold + 1]);
+                }
+                
                 int progress = i / (shotBoundaryPaths.Count - 1);
                 ProgressUpdate(progress);
             }
@@ -101,18 +128,21 @@ namespace CSC741M_MP2.Model
 
             foreach (int key in a.Keys.ToList())
             {
-                difference += a[key];
 
                 if (b.ContainsKey(key))
                 {
-                    difference += b[key];
+                    difference = Math.Abs(b[key]-a[key]);
                     b.Remove(key);
+                }
+                else
+                {
+                    difference = a[key];
                 }
             }
 
             foreach (int key in b.Keys.ToList())
             {
-                difference += b[key];
+                difference = b[key];
             }
 
             count = a.Count + b.Count;
