@@ -25,57 +25,64 @@ namespace CSC741M_MP2.Model
             keyframePaths = new List<String>();
         }
 
-        public static Color convertImage(string path)
+        public static Dictionary<int, int> convertImage(string path)
         {
             Bitmap image = new Bitmap(path);
             LockBitmap lbmp = new LockBitmap(image);
-            Color convertedImage = new Color();
+            Color[,] convertedImage = new Color[image.Height, image.Width];
+            Dictionary<int, int> histogram = new Dictionary<int, int>();
 
             lbmp.LockBits();
             for (int i = 0; i < image.Height; i++)
             {
                 for (int j = 0; j < image.Width; j++)
                 {
-                    convertedImage = lbmp.GetPixel(j, i);
+                    convertedImage[i, j] = lbmp.GetPixel(j, i);
+                    int key = (convertedImage[i, j].R ^ 48) + ((convertedImage[i, j].G ^ 48) >> 2) + ((convertedImage[i, j].B ^ 48) >> 4);
+                    if (histogram.ContainsKey(key))
+                    {
+                        histogram[key] += 1;
+                    }
+                    else
+                    {
+                        histogram.Add(key, 1);
+                    }
+
                 }
             }
             lbmp.UnlockBits();
 
-            return convertedImage;
+            return histogram;
         }
 
         public List<String> getShotBoundaries()
         {
             // Implementation here.
             shotBoundaryPaths = Directory.GetFiles(path).Where(p => p.EndsWith(".jpg") || p.EndsWith(".jpeg")).Take(10).ToList();
-            Dictionary<int, double> histogram1, histogram2;
-            Color convertedImage;
+            Dictionary<int, int> histogram1, histogram2;
             double similarity;
             List<string> results = new List<string>();
             string p;
 
-            for (int i = 0; i < shotBoundaryPaths.Count-1; i++)
+            for (int i = 0; i < shotBoundaryPaths.Count - 1; i++)
             {
                 p = shotBoundaryPaths[i];
-                convertedImage = convertImage(p);
-                histogram1 = generateHistogram(convertedImage);
-                
+                histogram1 = convertImage(p);
+
                 p = shotBoundaryPaths[i + 1];
-                convertedImage = convertImage(p);
-                histogram2 = generateHistogram(convertedImage);
+                histogram2 = convertImage(p);
 
-                similarity = getSimilarity(histogram1, histogram2);
+                similarity = getDifference(histogram1, histogram2);
 
-                if (similarity < settings.SimilarityThreshold)
+                double similarityThreshold = 0.3;
+                if (similarity < similarityThreshold)
                 {
                     results.Add(shotBoundaryPaths[i + 1]);
                 }
 
-                int progress = i / (shotBoundaryPaths.Count-1);
+                int progress = i / (shotBoundaryPaths.Count - 1);
                 ProgressUpdate(progress);
             }
-
-            //ProgressUpdate(100);
             return shotBoundaryPaths;
         }
 
@@ -87,60 +94,34 @@ namespace CSC741M_MP2.Model
             return keyframePaths;
         }
 
-        public static Dictionary<int, double> generateHistogram(Color image)
+        public double getDifference(Dictionary<int, int> a, Dictionary<int, int> b)
         {
-            Dictionary<int, double> histogram = new Dictionary<int, double>();
+            double difference = 0;
+            int count = 0;
 
-            for (int i = 0; i < image.GetLength(0); i++)
+            foreach (int key in a.Keys.ToList())
             {
-                for (int j = 0; j < image.GetLength(1); j++)
+                difference += a[key];
+
+                if (b.ContainsKey(key))
                 {
-                    int key = CIEConvert.LuvIndexOf(image[i, j]);
-                    if (histogram.ContainsKey(key))
-                    {
-                        histogram[key] += 1.0;
-                    }
-                    else
-                    {
-                        histogram.Add(key, 1.0);
-                    }
+                    difference += b[key];
+                    b.Remove(key);
                 }
             }
 
-            double totalPixels = histogram.Sum(x => x.Value);
-
-            foreach (int key in histogram.Keys.ToList())
+            foreach (int key in b.Keys.ToList())
             {
-                histogram[key] /= totalPixels;
+                difference += b[key];
             }
 
-            return histogram;
-        }
+            count = a.Count + b.Count;
 
-        //private double getSimilarity(Dictionary<int, double> query, Dictionary<int, double> data, double threshold)
-        private double getSimilarity(Dictionary<int, double> query, Dictionary<int, double> data)
-        {
-            Dictionary<int, double> compilation = new Dictionary<int, double>();
-            double threshold = 0.5;
-            for (int i = 0; i < query.Count; i++)
-            {
-                int queryKey = query.Keys.ElementAt(i);
-                if (query[queryKey] >= threshold)
-                {
-                    compilation.Add(queryKey, AlgorithmHelper.getColorExactSimilarity(queryKey, query, data));
-                }
-            }
+            difference /= count;
 
-            double total = 0.0;
-            int keyCount = compilation.Keys.Count;
-            foreach (int key in compilation.Keys)
-            {
-                total += compilation[key];
-            }
-            total /= keyCount;
-
-            return total;
-            }
+            return difference;
         }
     }
+
 }
+
