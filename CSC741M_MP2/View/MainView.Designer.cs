@@ -48,6 +48,10 @@
             this.defaultSearchPathLabel = new MetroFramework.Controls.MetroLabel();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            this.constantALabel = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
+            this.constantATextBox = new MetroFramework.Controls.MetroTextBox();
+            this.postTransitionTextBox = new MetroFramework.Controls.MetroTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.metroTabs.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -102,7 +106,7 @@
             this.metroTabs.Controls.Add(this.metroTabPage3);
             this.metroTabs.Location = new System.Drawing.Point(23, 63);
             this.metroTabs.Name = "metroTabs";
-            this.metroTabs.SelectedIndex = 0;
+            this.metroTabs.SelectedIndex = 1;
             this.metroTabs.Size = new System.Drawing.Size(679, 482);
             this.metroTabs.TabIndex = 3;
             // 
@@ -190,6 +194,10 @@
             // 
             // metroTabPage2
             // 
+            this.metroTabPage2.Controls.Add(this.postTransitionTextBox);
+            this.metroTabPage2.Controls.Add(this.constantATextBox);
+            this.metroTabPage2.Controls.Add(this.metroLabel3);
+            this.metroTabPage2.Controls.Add(this.constantALabel);
             this.metroTabPage2.Controls.Add(this.defaultSearchPathBrowseButton);
             this.metroTabPage2.Controls.Add(this.saveSettingsButton);
             this.metroTabPage2.Controls.Add(this.defaultSearchPathTextBox);
@@ -213,7 +221,7 @@
             // 
             // saveSettingsButton
             // 
-            this.saveSettingsButton.Location = new System.Drawing.Point(7, 57);
+            this.saveSettingsButton.Location = new System.Drawing.Point(3, 164);
             this.saveSettingsButton.Name = "saveSettingsButton";
             this.saveSettingsButton.Size = new System.Drawing.Size(86, 29);
             this.saveSettingsButton.TabIndex = 4;
@@ -222,15 +230,15 @@
             // 
             // defaultSearchPathTextBox
             // 
-            this.defaultSearchPathTextBox.Location = new System.Drawing.Point(131, 12);
+            this.defaultSearchPathTextBox.Location = new System.Drawing.Point(217, 12);
             this.defaultSearchPathTextBox.Name = "defaultSearchPathTextBox";
-            this.defaultSearchPathTextBox.Size = new System.Drawing.Size(377, 23);
+            this.defaultSearchPathTextBox.Size = new System.Drawing.Size(291, 23);
             this.defaultSearchPathTextBox.TabIndex = 3;
             // 
             // defaultSearchPathLabel
             // 
             this.defaultSearchPathLabel.AutoSize = true;
-            this.defaultSearchPathLabel.Location = new System.Drawing.Point(3, 14);
+            this.defaultSearchPathLabel.Location = new System.Drawing.Point(4, 16);
             this.defaultSearchPathLabel.Name = "defaultSearchPathLabel";
             this.defaultSearchPathLabel.Size = new System.Drawing.Size(122, 19);
             this.defaultSearchPathLabel.TabIndex = 2;
@@ -256,6 +264,38 @@
             this.metroLabel1.TabIndex = 2;
             this.metroLabel1.Text = "CSC741M MP2\r\n\r\nDeveloped and Implemented by: LIVELO, Evan Dennison S. and VER, An" +
     "drea Nicole O.\r\nSubmitted to: Dr. Conrado Ruiz Jr.\r\n\r\nT1 AY 2016-2017\r\n\r\n";
+            // 
+            // constantALabel
+            // 
+            this.constantALabel.AutoSize = true;
+            this.constantALabel.Location = new System.Drawing.Point(4, 55);
+            this.constantALabel.Name = "constantALabel";
+            this.constantALabel.Size = new System.Drawing.Size(113, 19);
+            this.constantALabel.TabIndex = 6;
+            this.constantALabel.Text = "Constant Value (a)";
+            // 
+            // metroLabel3
+            // 
+            this.metroLabel3.AutoSize = true;
+            this.metroLabel3.Location = new System.Drawing.Point(4, 94);
+            this.metroLabel3.Name = "metroLabel3";
+            this.metroLabel3.Size = new System.Drawing.Size(192, 19);
+            this.metroLabel3.TabIndex = 7;
+            this.metroLabel3.Text = "Post Transition Frame Tolerance";
+            // 
+            // constantATextBox
+            // 
+            this.constantATextBox.Location = new System.Drawing.Point(217, 51);
+            this.constantATextBox.Name = "constantATextBox";
+            this.constantATextBox.Size = new System.Drawing.Size(291, 23);
+            this.constantATextBox.TabIndex = 8;
+            // 
+            // postTransitionTextBox
+            // 
+            this.postTransitionTextBox.Location = new System.Drawing.Point(217, 90);
+            this.postTransitionTextBox.Name = "postTransitionTextBox";
+            this.postTransitionTextBox.Size = new System.Drawing.Size(291, 23);
+            this.postTransitionTextBox.TabIndex = 9;
             // 
             // MainView
             // 
@@ -298,5 +338,9 @@
         private MetroFramework.Controls.MetroTextBox defaultSearchPathTextBox;
         private MetroFramework.Controls.MetroLabel defaultSearchPathLabel;
         private MetroFramework.Controls.MetroButton defaultSearchPathBrowseButton;
+        private MetroFramework.Controls.MetroLabel constantALabel;
+        private MetroFramework.Controls.MetroTextBox postTransitionTextBox;
+        private MetroFramework.Controls.MetroTextBox constantATextBox;
+        private MetroFramework.Controls.MetroLabel metroLabel3;
     }
 }

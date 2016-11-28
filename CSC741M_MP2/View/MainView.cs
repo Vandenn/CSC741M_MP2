@@ -108,9 +108,11 @@ namespace CSC741M_MP2.View
             runButton.Enabled = enabled;
         }
 
-        public void populateSettings(string defaultSearchPath)
+        public void populateSettings(string defaultSearchPath, double constantAValue, int postTransitionFrameTolerance)
         {
             defaultSearchPathTextBox.Text = defaultSearchPath;
+            constantATextBox.Text = constantAValue.ToString();
+            postTransitionTextBox.Text = postTransitionFrameTolerance.ToString();
         }
 
         public void fillShotBoundaryPanel(List<string> shotBoundaries)
@@ -136,6 +138,7 @@ namespace CSC741M_MP2.View
             {
                 PictureBox picture = new PictureBox();
                 picture.Image = Image.FromFile(path);
+                Console.WriteLine(path);
                 picture.Location = new Point(x, y);
                 picture.SizeMode = PictureBoxSizeMode.StretchImage;
                 x += picture.Width + 5;
@@ -236,7 +239,7 @@ namespace CSC741M_MP2.View
 
         private void saveSettingsButton_Click(object sender, EventArgs e)
         {
-            mainPresenter.saveSettingsButtonClickHandler(defaultSearchPathTextBox.Text);
+            mainPresenter.saveSettingsButtonClickHandler(defaultSearchPathTextBox.Text, constantATextBox.Text, postTransitionTextBox.Text);
         }
         #endregion
     }

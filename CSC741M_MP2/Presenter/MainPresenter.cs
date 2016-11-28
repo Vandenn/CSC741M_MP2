@@ -29,7 +29,9 @@ namespace CSC741M_MP2.Presenter
             this.view = view;
             settings = Settings.getInstance();
             view.populateSettings(
-                settings.DefaultSearchPath
+                settings.defaultSearchPath,
+                settings.constantAValue,
+                settings.postTransitionFrameTolerance
             );
             shotBoundaries = new List<string>();
             keyframes = new List<string>();
@@ -110,11 +112,18 @@ namespace CSC741M_MP2.Presenter
             }
         }
 
-        public void saveSettingsButtonClickHandler(string defaultSearchPath)
+        public void saveSettingsButtonClickHandler(string defaultSearchPath, string constantAValue, string postTransitionFrameTolerance)
         {
-            if (Directory.Exists(defaultSearchPath))
+            double dConstantAValue;
+            int nPostTransitionFrameTolerance;
+
+            if (Directory.Exists(defaultSearchPath) && 
+                Double.TryParse(constantAValue, out dConstantAValue) && dConstantAValue > 0 && 
+                int.TryParse(postTransitionFrameTolerance, out nPostTransitionFrameTolerance) && nPostTransitionFrameTolerance > 0)
             {
-                settings.DefaultSearchPath = defaultSearchPath;
+                settings.defaultSearchPath = defaultSearchPath;
+                settings.constantAValue = dConstantAValue;
+                settings.postTransitionFrameTolerance = nPostTransitionFrameTolerance;
                 settings.saveSettings();
             }
             else
@@ -127,7 +136,7 @@ namespace CSC741M_MP2.Presenter
         #region Helper Functions
         public string getDefaultSearchPath()
         {
-            return Directory.Exists(settings.DefaultSearchPath) ? settings.DefaultSearchPath : @"C:\";
+            return Directory.Exists(settings.defaultSearchPath) ? settings.defaultSearchPath : @"C:\";
         }
         #endregion
 

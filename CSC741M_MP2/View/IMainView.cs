@@ -14,7 +14,7 @@ namespace CSC741M_MP2.View
         void showInvalidInputError(string title, string text);
         void updateProgressBar(int progress);
         void setUIEnabled(bool enabled);
-        void populateSettings(string defaultSearchPath);
+        void populateSettings(string defaultSearchPath, double constantAValue, int postTransitionFrameTolerance);
         void fillShotBoundaryPanel(List<string> shotBoundaries);
         void fillKeyframePanel(List<string> keyframes);
     }

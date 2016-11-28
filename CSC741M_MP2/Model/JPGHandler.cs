@@ -11,18 +11,23 @@ namespace CSC741M_MP2.Model
 {
     public class JPGHandler
     {
+
         public delegate void ProgressUpdateEvent(int progress);
         public event ProgressUpdateEvent ProgressUpdate;
 
         private string path;
+        private List<String> imagePaths;
         private List<String> shotBoundaryPaths;
         private List<String> keyframePaths;
+        private Settings settings;
 
         public JPGHandler(string path)
         {
             this.path = path;
             shotBoundaryPaths = new List<String>();
             keyframePaths = new List<String>();
+            imagePaths = Directory.GetFiles(path).Where(p => p.EndsWith(".jpg") || p.EndsWith(".jpeg")).ToList();
+            settings = Settings.getInstance();
         }
 
         public static Dictionary<int, int> convertImage(string path)
@@ -37,7 +42,7 @@ namespace CSC741M_MP2.Model
                 for (int j = 0; j < image.Width; j++)
                 {
                     Color c = lbmp.GetPixel(j, i);
-                    int key = (c.R ^ 48) + ((c.G ^ 48) >> 2) + ((c.B ^ 48) >> 4);
+                    int key = ((c.R & 192) >> 2) + ((c.G & 192) >> 4) + ((c.B & 192) >> 6) & 63;
                     if (histogram.ContainsKey(key))
                     {
                         histogram[key] += 1;
@@ -54,100 +59,118 @@ namespace CSC741M_MP2.Model
             return histogram;
         }
 
-        public List<String> getShotBoundaries()
+        public List<string> getShotBoundaries()
         {
-            // Implementation here.
-            shotBoundaryPaths = Directory.GetFiles(path).Where(p => p.EndsWith(".jpg") || p.EndsWith(".jpeg")).Take(10).ToList();
+            shotBoundaryPaths = new List<string>();
             Dictionary<int, int> histogram1, histogram2;
-            double[] similarity = new double[shotBoundaryPaths.Count-1];
-            List<string> results = new List<string>();
-            string temp;
+            double[] differences = new double[imagePaths.Count - 1];
 
-            for (int i = 0; i < shotBoundaryPaths.Count - 1; i++)
+            histogram1 = convertImage(imagePaths[0]);
+            for (int i = 1; i < imagePaths.Count; i++)
             {
-                temp = shotBoundaryPaths[i];
-                histogram1 = convertImage(temp);
-
-                temp = shotBoundaryPaths[i + 1];
-                histogram2 = convertImage(temp);
-
-                similarity[i] = getDifference(histogram1, histogram2);
-
+                histogram2 = convertImage(imagePaths[i]);
+                differences[i - 1] = getDifference(histogram1, histogram2);
+                histogram1 = histogram2;
+                ProgressUpdate((i / (imagePaths.Count - 1)) / 2);
             }
 
-            Boolean inTransition = false;
-            int countShotsAfterTransition = 0;
+            double averageDifference = differences.Average();
+            double sumOfSquaresOfDifferences = differences.Select(diff => (diff - averageDifference) * (diff - averageDifference)).Sum();
+            double differenceStandardDeviation = Math.Sqrt(sumOfSquaresOfDifferences / differences.Length);
+            double breakThreshold = averageDifference + settings.constantAValue * differenceStandardDeviation;
+            double transitionThreshold = averageDifference + differenceStandardDeviation;
+            int postTransitionShotsCtr = 0;
 
-            for (int i = 0; i < similarity.Length; i++)
+            bool inTransition = false;
+            int possibleTransitionEndIndex = -1;
+            shotBoundaryPaths.Add(imagePaths[0]);
+            Console.WriteLine(averageDifference + " = " + breakThreshold + " = " + transitionThreshold);
+            for (int i = 0; i < differences.Length; i++)
             {
-                double similarityThreshold = 0.75;
-                double transitionTreshold = 0.30;
-                int shotsThreshold = 10;
-                if (similarity[i] > similarityThreshold)
-                { //abrupt transition
-                    results.Add(shotBoundaryPaths[i + 1]);
+                Console.WriteLine(i + " - " + differences[i]);
+                if (differences[i] > breakThreshold)
+                {
+                    shotBoundaryPaths.Add(imagePaths[i]);
+                    shotBoundaryPaths.Add(imagePaths[i + 1]);
                 }
-                else if (similarity[i] > transitionTreshold)
+                else if (differences[i] > transitionThreshold)
                 {
                     if (!inTransition)
                     {
+                        shotBoundaryPaths.Add(imagePaths[i]);
                         inTransition = true;
                     }
-                    else
+                    else if (possibleTransitionEndIndex >= 0)
                     {
-                        countShotsAfterTransition = 1;
+                        possibleTransitionEndIndex = -1;
+                        postTransitionShotsCtr = 0;
                     }
                 }
-                else if (inTransition && countShotsAfterTransition < shotsThreshold)
+                else
                 {
-                    countShotsAfterTransition++;
+                    if (inTransition)
+                    {
+                        if (postTransitionShotsCtr < settings.postTransitionFrameTolerance)
+                        {
+                            if (postTransitionShotsCtr == 0)
+                            {
+                                possibleTransitionEndIndex = i - 1;
+                            }
+                            postTransitionShotsCtr++;
+                        }
+                        else
+                        {
+                            if (possibleTransitionEndIndex >= 0)
+                            {
+                                shotBoundaryPaths.Add(imagePaths[possibleTransitionEndIndex]);
+                                possibleTransitionEndIndex = -1;
+                            }
+                            inTransition = false;
+                            postTransitionShotsCtr = 0;
+                        }
+                    }
                 }
-                else if (inTransition)
-                {
-                    results.Add(shotBoundaryPaths[i - shotsThreshold + 1]);
-                }
-                
-                int progress = i / (shotBoundaryPaths.Count - 1);
-                ProgressUpdate(progress);
+
+                ProgressUpdate(50 + i / (differences.Length - 1));
             }
+
+            if (!shotBoundaryPaths.Contains(imagePaths[imagePaths.Count - 1]))
+                shotBoundaryPaths.Add(imagePaths[imagePaths.Count - 1]);
+
+            ProgressUpdate(100);
             return shotBoundaryPaths;
         }
 
         public List<String> getKeyframes()
         {
-            // Implementation here.
-            keyframePaths = Directory.GetFiles(path).Where(p => p.EndsWith(".jpg") || p.EndsWith(".jpeg")).Take(10).ToList();
+            keyframePaths = new List<string>();
             ProgressUpdate(100);
             return keyframePaths;
         }
 
         public double getDifference(Dictionary<int, int> a, Dictionary<int, int> b)
         {
+            Dictionary<int, int> aCopy = a;
+            Dictionary<int, int> bCopy = b.ToDictionary(e => e.Key, e => e.Value);
             double difference = 0;
-            int count = 0;
 
-            foreach (int key in a.Keys.ToList())
+            foreach (int key in aCopy.Keys.ToList())
             {
-
-                if (b.ContainsKey(key))
+                if (bCopy.ContainsKey(key))
                 {
-                    difference = Math.Abs(b[key]-a[key]);
-                    b.Remove(key);
+                    difference += Math.Abs(bCopy[key]-aCopy[key]);
+                    bCopy.Remove(key);
                 }
                 else
                 {
-                    difference = a[key];
+                    difference += aCopy[key];
                 }
             }
 
-            foreach (int key in b.Keys.ToList())
+            foreach (int key in bCopy.Keys.ToList())
             {
-                difference = b[key];
+                difference += bCopy[key];
             }
-
-            count = a.Count + b.Count;
-
-            difference /= count;
 
             return difference;
         }

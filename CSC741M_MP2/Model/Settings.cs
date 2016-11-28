@@ -13,21 +13,15 @@ namespace CSC741M_MP2.Model
     {
         private static Settings _instance;
 
-        private string defaultSearchPath;
-
-        public string DefaultSearchPath
-        {
-            get { return defaultSearchPath; }
-            set
-            {
-                if (Directory.Exists(value))
-                    defaultSearchPath = value;
-            }
-        }
+        public string defaultSearchPath { get; set; }
+        public double constantAValue { get; set; }
+        public int postTransitionFrameTolerance { get; set; }
 
         protected Settings()
         {
             defaultSearchPath = @"C:\";
+            constantAValue = 1;
+            postTransitionFrameTolerance = 1;
         }
 
         public static Settings getInstance()
