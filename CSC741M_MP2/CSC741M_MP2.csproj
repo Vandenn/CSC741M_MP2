@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\JPGHandler.cs" />
+    <Compile Include="Model\LockBitmap.cs" />
     <Compile Include="Model\MPGHandler.cs" />
     <Compile Include="Model\Settings.cs" />
     <Compile Include="Presenter\MainPresenter.cs" />
