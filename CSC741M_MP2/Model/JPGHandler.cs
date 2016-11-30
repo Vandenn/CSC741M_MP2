@@ -30,7 +30,7 @@ namespace CSC741M_MP2.Model
             settings = Settings.getInstance();
         }
 
-        public static Dictionary<int, int> convertImage(string path)
+        public Dictionary<int, int> convertImage(string path)
         {
             Bitmap image = new Bitmap(path);
             LockBitmap lbmp = new LockBitmap(image);
@@ -51,7 +51,6 @@ namespace CSC741M_MP2.Model
                     {
                         histogram.Add(key, 1);
                     }
-
                 }
             }
             lbmp.UnlockBits();
@@ -84,10 +83,8 @@ namespace CSC741M_MP2.Model
             bool inTransition = false;
             int possibleTransitionEndIndex = -1;
             shotBoundaryPaths.Add(imagePaths[0]);
-            Console.WriteLine(averageDifference + " = " + breakThreshold + " = " + transitionThreshold);
             for (int i = 0; i < differences.Length; i++)
             {
-                Console.WriteLine(i + " - " + differences[i]);
                 if (differences[i] > breakThreshold)
                 {
                     shotBoundaryPaths.Add(imagePaths[i]);
@@ -152,24 +149,29 @@ namespace CSC741M_MP2.Model
             int j = 0;
             Dictionary<int, int> histogram = new Dictionary<int, int>();
 
-            //shotBoundaries.Add(imagePaths[imagePaths.Count-1]); //last frame
-            for (int i = 1; i < shotBoundaries.Count; i++)
+            for (int i = 0; i <= shotBoundaries.Count - 2; i += 2)
             {
+                if (i + 1 >= shotBoundaries.Count) break;
+
                 Dictionary<string, Dictionary<int, int>> sumHistogram = new Dictionary<string, Dictionary<int, int>>();
+
+                while (!shotBoundaries[i].Equals(imagePaths[j]))
+                    j++;
+
                 count = 0;
                 string aveHistogram;
-                while (!shotBoundaries[i].Equals(imagePaths[j]) && j < imagePaths.Count)
+                while (!shotBoundaries[i+1].Equals(imagePaths[j]))
                 {
-
                     histogram = convertImage(imagePaths[j]);
                     sumHistogram.Add(imagePaths[j], histogram);
                     j++;
                     count++;
                 }
                 aveHistogram = getAverageHistogram(sumHistogram, count);
-                Console.WriteLine(i + " " + aveHistogram);
 
                 keyframePaths.Add(aveHistogram);
+
+                ProgressUpdate(i / (shotBoundaries.Count - 2));
             }
             
             
@@ -185,8 +187,6 @@ namespace CSC741M_MP2.Model
             // iterate through each frame between boundary shots
             foreach (string key in histogram.Keys.ToList())
             {
-                Console.WriteLine("AAA key = " + key);
-
                 // add 
                 foreach (int k in histogram[key].Keys.ToList())
                 {
