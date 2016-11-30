@@ -145,11 +145,77 @@ namespace CSC741M_MP2.Model
             return shotBoundaryPaths;
         }
 
-        public List<String> getKeyframes()
+        public List<String> getKeyframes(List<String> shotBoundaries)
         {
             keyframePaths = new List<string>();
+            int count = 0;
+            int j = 0;
+            Dictionary<int, int> histogram = new Dictionary<int, int>();
+            Dictionary<string, Dictionary<int, int>> sumHistogram = new Dictionary<string, Dictionary<int, int>>();
+
+            shotBoundaries.Add(imagePaths[imagePaths.Count-1]); //last frame
+            for (int i = 0; i < shotBoundaries.Count; i++)
+            {
+                count = 0;
+                string aveHistogram;
+                while (!shotBoundaries[i].Equals(imagePaths[j]))
+                {
+                    histogram = convertImage(imagePaths[j]);
+                    sumHistogram.Add(imagePaths[j], histogram);
+                    j++;
+                    count++;
+                }
+                aveHistogram = getAverageHistogram(sumHistogram, count);
+                keyframePaths.Add(aveHistogram);
+            }
+            
+            
             ProgressUpdate(100);
             return keyframePaths;
+        }
+
+        public string getAverageHistogram(Dictionary<string, Dictionary<int, int>> histogram, int count)
+        {
+            string imagePath = "";
+            Dictionary<int, int> sum = new Dictionary<int, int>();
+
+            // iterate through each frame between boundary shots
+            foreach (string key in histogram.Keys.ToList())
+            {
+                // add 
+                foreach (int k in histogram[key].Keys.ToList())
+                {
+                    if (sum.ContainsKey(k))
+                    {
+                        sum[k] += histogram[key][k];
+                    }
+                    else
+                    {
+                        sum.Add(k, histogram[key][k]);
+                    }
+                }
+            }
+
+            // get average histogram
+            foreach (int k in sum.Keys.ToList())
+            {
+                sum[k] /= count;
+            }
+
+            //iterate through frames which is closest to average
+            double diff = 0;
+            double min = 0;
+            foreach (string key in histogram.Keys.ToList())
+            {
+                // compararison of histogram 
+                diff = getDifference(histogram[key], sum);
+                if (min == 0 && diff < min)
+                {
+                    min = diff;
+                    imagePath = key;
+                }
+            }
+            return imagePath;
         }
 
         public double getDifference(Dictionary<int, int> a, Dictionary<int, int> b)

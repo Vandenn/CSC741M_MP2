@@ -67,7 +67,7 @@ namespace CSC741M_MP2.Presenter
                     jpgHandler.ProgressUpdate += process_ProgressListener;
                     shotBoundaries = jpgHandler.getShotBoundaries();
                     processWorker.ReportProgress(0);
-                    keyframes = jpgHandler.getKeyframes();
+                    keyframes = jpgHandler.getKeyframes(shotBoundaries);
                     break;
                 default: break;
             }
