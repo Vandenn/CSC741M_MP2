@@ -151,21 +151,24 @@ namespace CSC741M_MP2.Model
             int count = 0;
             int j = 0;
             Dictionary<int, int> histogram = new Dictionary<int, int>();
-            Dictionary<string, Dictionary<int, int>> sumHistogram = new Dictionary<string, Dictionary<int, int>>();
 
-            shotBoundaries.Add(imagePaths[imagePaths.Count-1]); //last frame
+            //shotBoundaries.Add(imagePaths[imagePaths.Count-1]); //last frame
             for (int i = 0; i < shotBoundaries.Count; i++)
             {
+                Dictionary<string, Dictionary<int, int>> sumHistogram = new Dictionary<string, Dictionary<int, int>>();
                 count = 0;
                 string aveHistogram;
                 while (!shotBoundaries[i].Equals(imagePaths[j]))
                 {
+
                     histogram = convertImage(imagePaths[j]);
                     sumHistogram.Add(imagePaths[j], histogram);
                     j++;
                     count++;
                 }
                 aveHistogram = getAverageHistogram(sumHistogram, count);
+                Console.WriteLine(i + " " + aveHistogram);
+
                 keyframePaths.Add(aveHistogram);
             }
             
@@ -182,6 +185,8 @@ namespace CSC741M_MP2.Model
             // iterate through each frame between boundary shots
             foreach (string key in histogram.Keys.ToList())
             {
+                Console.WriteLine("AAA key = " + key);
+
                 // add 
                 foreach (int k in histogram[key].Keys.ToList())
                 {
@@ -215,6 +220,8 @@ namespace CSC741M_MP2.Model
                     imagePath = key;
                 }
             }
+            Console.WriteLine(imagePath);
+
             return imagePath;
         }
 
