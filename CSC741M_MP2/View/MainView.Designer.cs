@@ -40,18 +40,17 @@
             this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
             this.shotBoundariesLabel = new MetroFramework.Controls.MetroLabel();
             this.runButton = new MetroFramework.Controls.MetroButton();
-            this.fileTypeComboBox = new MetroFramework.Controls.MetroComboBox();
             this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.postTransitionTextBox = new MetroFramework.Controls.MetroTextBox();
+            this.constantATextBox = new MetroFramework.Controls.MetroTextBox();
+            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
+            this.constantALabel = new MetroFramework.Controls.MetroLabel();
             this.defaultSearchPathBrowseButton = new MetroFramework.Controls.MetroButton();
             this.saveSettingsButton = new MetroFramework.Controls.MetroButton();
             this.defaultSearchPathTextBox = new MetroFramework.Controls.MetroTextBox();
             this.defaultSearchPathLabel = new MetroFramework.Controls.MetroLabel();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
-            this.constantALabel = new MetroFramework.Controls.MetroLabel();
-            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
-            this.constantATextBox = new MetroFramework.Controls.MetroTextBox();
-            this.postTransitionTextBox = new MetroFramework.Controls.MetroTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.metroTabs.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -67,16 +66,16 @@
             // 
             // filePathLabel
             // 
-            this.filePathLabel.Location = new System.Drawing.Point(200, 7);
+            this.filePathLabel.Location = new System.Drawing.Point(95, 7);
             this.filePathLabel.Name = "filePathLabel";
-            this.filePathLabel.Size = new System.Drawing.Size(379, 29);
+            this.filePathLabel.Size = new System.Drawing.Size(484, 29);
             this.filePathLabel.TabIndex = 0;
             this.filePathLabel.Text = "Click Browse to look for file/folder";
             this.filePathLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // inputBrowseButton
             // 
-            this.inputBrowseButton.Location = new System.Drawing.Point(108, 7);
+            this.inputBrowseButton.Location = new System.Drawing.Point(3, 7);
             this.inputBrowseButton.Name = "inputBrowseButton";
             this.inputBrowseButton.Size = new System.Drawing.Size(86, 29);
             this.inputBrowseButton.TabIndex = 1;
@@ -106,7 +105,7 @@
             this.metroTabs.Controls.Add(this.metroTabPage3);
             this.metroTabs.Location = new System.Drawing.Point(23, 63);
             this.metroTabs.Name = "metroTabs";
-            this.metroTabs.SelectedIndex = 1;
+            this.metroTabs.SelectedIndex = 0;
             this.metroTabs.Size = new System.Drawing.Size(679, 482);
             this.metroTabs.TabIndex = 3;
             // 
@@ -117,7 +116,6 @@
             this.metroTabPage1.Controls.Add(this.metroLabel2);
             this.metroTabPage1.Controls.Add(this.shotBoundariesLabel);
             this.metroTabPage1.Controls.Add(this.runButton);
-            this.metroTabPage1.Controls.Add(this.fileTypeComboBox);
             this.metroTabPage1.Controls.Add(this.shotBoundaryPanel);
             this.metroTabPage1.Controls.Add(this.filePathLabel);
             this.metroTabPage1.Controls.Add(this.inputBrowseButton);
@@ -179,19 +177,6 @@
             this.runButton.Text = "Run";
             this.runButton.Click += new System.EventHandler(this.runButton_Click);
             // 
-            // fileTypeComboBox
-            // 
-            this.fileTypeComboBox.FormattingEnabled = true;
-            this.fileTypeComboBox.ItemHeight = 23;
-            this.fileTypeComboBox.Items.AddRange(new object[] {
-            "MPG",
-            "JPG"});
-            this.fileTypeComboBox.Location = new System.Drawing.Point(3, 7);
-            this.fileTypeComboBox.Name = "fileTypeComboBox";
-            this.fileTypeComboBox.Size = new System.Drawing.Size(99, 29);
-            this.fileTypeComboBox.TabIndex = 3;
-            this.fileTypeComboBox.SelectedIndexChanged += new System.EventHandler(this.fileTypeComboBox_SelectedIndexChanged);
-            // 
             // metroTabPage2
             // 
             this.metroTabPage2.Controls.Add(this.postTransitionTextBox);
@@ -209,6 +194,38 @@
             this.metroTabPage2.TabIndex = 1;
             this.metroTabPage2.Text = "Settings";
             this.metroTabPage2.VerticalScrollbarBarColor = true;
+            // 
+            // postTransitionTextBox
+            // 
+            this.postTransitionTextBox.Location = new System.Drawing.Point(217, 90);
+            this.postTransitionTextBox.Name = "postTransitionTextBox";
+            this.postTransitionTextBox.Size = new System.Drawing.Size(291, 23);
+            this.postTransitionTextBox.TabIndex = 9;
+            // 
+            // constantATextBox
+            // 
+            this.constantATextBox.Location = new System.Drawing.Point(217, 51);
+            this.constantATextBox.Name = "constantATextBox";
+            this.constantATextBox.Size = new System.Drawing.Size(291, 23);
+            this.constantATextBox.TabIndex = 8;
+            // 
+            // metroLabel3
+            // 
+            this.metroLabel3.AutoSize = true;
+            this.metroLabel3.Location = new System.Drawing.Point(4, 94);
+            this.metroLabel3.Name = "metroLabel3";
+            this.metroLabel3.Size = new System.Drawing.Size(192, 19);
+            this.metroLabel3.TabIndex = 7;
+            this.metroLabel3.Text = "Post Transition Frame Tolerance";
+            // 
+            // constantALabel
+            // 
+            this.constantALabel.AutoSize = true;
+            this.constantALabel.Location = new System.Drawing.Point(4, 55);
+            this.constantALabel.Name = "constantALabel";
+            this.constantALabel.Size = new System.Drawing.Size(113, 19);
+            this.constantALabel.TabIndex = 6;
+            this.constantALabel.Text = "Constant Value (a)";
             // 
             // defaultSearchPathBrowseButton
             // 
@@ -265,38 +282,6 @@
             this.metroLabel1.Text = "CSC741M MP2\r\n\r\nDeveloped and Implemented by: LIVELO, Evan Dennison S. and VER, An" +
     "drea Nicole O.\r\nSubmitted to: Dr. Conrado Ruiz Jr.\r\n\r\nT1 AY 2016-2017\r\n\r\n";
             // 
-            // constantALabel
-            // 
-            this.constantALabel.AutoSize = true;
-            this.constantALabel.Location = new System.Drawing.Point(4, 55);
-            this.constantALabel.Name = "constantALabel";
-            this.constantALabel.Size = new System.Drawing.Size(113, 19);
-            this.constantALabel.TabIndex = 6;
-            this.constantALabel.Text = "Constant Value (a)";
-            // 
-            // metroLabel3
-            // 
-            this.metroLabel3.AutoSize = true;
-            this.metroLabel3.Location = new System.Drawing.Point(4, 94);
-            this.metroLabel3.Name = "metroLabel3";
-            this.metroLabel3.Size = new System.Drawing.Size(192, 19);
-            this.metroLabel3.TabIndex = 7;
-            this.metroLabel3.Text = "Post Transition Frame Tolerance";
-            // 
-            // constantATextBox
-            // 
-            this.constantATextBox.Location = new System.Drawing.Point(217, 51);
-            this.constantATextBox.Name = "constantATextBox";
-            this.constantATextBox.Size = new System.Drawing.Size(291, 23);
-            this.constantATextBox.TabIndex = 8;
-            // 
-            // postTransitionTextBox
-            // 
-            this.postTransitionTextBox.Location = new System.Drawing.Point(217, 90);
-            this.postTransitionTextBox.Name = "postTransitionTextBox";
-            this.postTransitionTextBox.Size = new System.Drawing.Size(291, 23);
-            this.postTransitionTextBox.TabIndex = 9;
-            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -327,7 +312,6 @@
         private MetroFramework.Controls.MetroTabPage metroTabPage1;
         private MetroFramework.Controls.MetroTabPage metroTabPage2;
         private MetroFramework.Controls.MetroTabPage metroTabPage3;
-        private MetroFramework.Controls.MetroComboBox fileTypeComboBox;
         private MetroFramework.Controls.MetroLabel metroLabel1;
         private MetroFramework.Controls.MetroProgressBar processProgressBar;
         private MetroFramework.Controls.MetroPanel keyframePanel;

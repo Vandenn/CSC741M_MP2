@@ -70,7 +70,7 @@ namespace CSC741M_MP2.Model
                 histogram2 = convertImage(imagePaths[i]);
                 differences[i - 1] = getDifference(histogram1, histogram2);
                 histogram1 = histogram2;
-                ProgressUpdate((i / (imagePaths.Count - 1)) / 2);
+                ProgressUpdate((i / (imagePaths.Count - 1)) * 100);
             }
 
             double averageDifference = differences.Average();
@@ -131,7 +131,7 @@ namespace CSC741M_MP2.Model
                     }
                 }
 
-                ProgressUpdate(50 + i / (differences.Length - 1));
+                ProgressUpdate(50 + (i / (differences.Length - 1)) * 100);
             }
 
             if (!shotBoundaryPaths.Contains(imagePaths[imagePaths.Count - 1]))
@@ -171,7 +171,7 @@ namespace CSC741M_MP2.Model
 
                 keyframePaths.Add(aveHistogram);
 
-                ProgressUpdate(i / (shotBoundaries.Count - 2));
+                ProgressUpdate(i / (shotBoundaries.Count - 2) * 100);
             }
             
             

@@ -50,27 +50,13 @@ namespace CSC741M_MP2.Presenter
         private void process_DoWork(object sender, DoWorkEventArgs e)
         {
             object[] parameters = e.Argument as object[];
-            int selectedIndex = (int)parameters[0];
-            string inputPath = parameters[1] as string;
+            string inputPath = parameters[0] as string;
 
-            switch (selectedIndex)
-            {
-                case 0:
-                    processWorker.ReportProgress(0);
-                    Thread.Sleep(200);
-                    processWorker.ReportProgress(50);
-                    Thread.Sleep(200);
-                    processWorker.ReportProgress(100);
-                    break;
-                case 1:
-                    JPGHandler jpgHandler = new JPGHandler(inputPath);
-                    jpgHandler.ProgressUpdate += process_ProgressListener;
-                    shotBoundaries = jpgHandler.getShotBoundaries();
-                    processWorker.ReportProgress(0);
-                    keyframes = jpgHandler.getKeyframes(shotBoundaries);
-                    break;
-                default: break;
-            }
+            JPGHandler jpgHandler = new JPGHandler(inputPath);
+            jpgHandler.ProgressUpdate += process_ProgressListener;
+            shotBoundaries = jpgHandler.getShotBoundaries();
+            processWorker.ReportProgress(0);
+            keyframes = jpgHandler.getKeyframes(shotBoundaries);
         }
 
         private void process_ProgressListener(int progress)
@@ -92,18 +78,17 @@ namespace CSC741M_MP2.Presenter
         #endregion
 
         #region View Event Handlers
-        public void inputBrowseButtonClickHandler(int selectedIndex)
+        public void inputBrowseButtonClickHandler()
         {
-            if (selectedIndex == 0) view.openMPGDialog();
-            else if (selectedIndex == 1) view.openJPGDialog();
+            view.openJPGDialog();
         }
 
-        public void runButtonClickHandler(int selectedIndex, string path)
+        public void runButtonClickHandler(string path)
         {
-            if (checkIfInputPathIsValid(selectedIndex, path))
+            if (checkIfInputPathIsValid(path))
             {
                 view.setUIEnabled(false);
-                object[] parameters = new object[] { selectedIndex, path };
+                object[] parameters = new object[] { path };
                 processWorker.RunWorkerAsync(parameters);
             }
             else
@@ -140,9 +125,9 @@ namespace CSC741M_MP2.Presenter
         }
         #endregion
 
-        private bool checkIfInputPathIsValid(int selectedIndex, string path)
+        private bool checkIfInputPathIsValid(string path)
         {
-            return selectedIndex == 0 && File.Exists(path) || selectedIndex == 1 && Directory.Exists(path);
+            return Directory.Exists(path);
         }
     }
 }

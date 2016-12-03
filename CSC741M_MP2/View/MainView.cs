@@ -55,7 +55,6 @@ namespace CSC741M_MP2.View
 
             /// UI Initialization
             filePathLabel.Text = noFilePathChosen;
-            fileTypeComboBox.SelectedIndex = 1;
             metroTabs.SelectedIndex = 0;
         }
 
@@ -102,7 +101,6 @@ namespace CSC741M_MP2.View
 
         public void setUIEnabled(bool enabled)
         {
-            fileTypeComboBox.Enabled = enabled;
             metroTabs.Enabled = enabled;
             inputBrowseButton.Enabled = enabled;
             runButton.Enabled = enabled;
@@ -188,7 +186,7 @@ namespace CSC741M_MP2.View
         #region Home Tab Functions
         private void inputBrowseButton_Click(object sender, EventArgs e)
         {
-            mainPresenter.inputBrowseButtonClickHandler(fileTypeComboBox.SelectedIndex);
+            mainPresenter.inputBrowseButtonClickHandler();
         }
 
         private void fileTypeComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -199,7 +197,7 @@ namespace CSC741M_MP2.View
 
         private void runButton_Click(object sender, EventArgs e)
         {
-            mainPresenter.runButtonClickHandler(fileTypeComboBox.SelectedIndex, currentPath);
+            mainPresenter.runButtonClickHandler(currentPath);
         }
 
         private void clearShotBoundaryPanel()
