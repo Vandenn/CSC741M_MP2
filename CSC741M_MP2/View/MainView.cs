@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MetroFramework.Forms;
 using System.IO;
 using CSC741M_MP2.Presenter;
+using MetroFramework.Controls;
 
 namespace CSC741M_MP2.View
 {
@@ -24,6 +25,8 @@ namespace CSC741M_MP2.View
 
         private List<PictureBox> shotBoundaryPictureBoxes;
         private List<PictureBox> keyframePictureBoxes;
+        private List<MetroLabel> shotBoundaryLabels;
+        private List<MetroLabel> keyframeLabels;
 
         public MainView()
         {
@@ -36,6 +39,8 @@ namespace CSC741M_MP2.View
             currentPath = "";
             shotBoundaryPictureBoxes = new List<PictureBox>();
             keyframePictureBoxes = new List<PictureBox>();
+            shotBoundaryLabels = new List<MetroLabel>();
+            keyframeLabels = new List<MetroLabel>();
 
             /// Background Worker Initialization
             shotBoundaryWorker = new BackgroundWorker();
@@ -139,15 +144,21 @@ namespace CSC741M_MP2.View
                 Console.WriteLine(path);
                 picture.Location = new Point(x, y);
                 picture.SizeMode = PictureBoxSizeMode.StretchImage;
-                x += picture.Width + 5;
-                shotBoundaryWorker.ReportProgress(0, picture);
+                MetroLabel label = new MetroLabel();
+                label.Text = Path.GetFileName(path);
+                label.Location = new Point(x, y * 2 + picture.Height);
+                x += picture.Width + 10;
+                shotBoundaryWorker.ReportProgress(0, new object[]{ picture, label });
             }
         }
 
         private void shotBoundary_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            shotBoundaryPictureBoxes.Add((PictureBox)e.UserState);
-            shotBoundaryPanel.Controls.Add((PictureBox)e.UserState);
+            object[] param = (object[])e.UserState;
+            shotBoundaryPictureBoxes.Add((PictureBox)param[0]);
+            shotBoundaryLabels.Add((MetroLabel)param[1]);
+            shotBoundaryPanel.Controls.Add((PictureBox)param[0]);
+            shotBoundaryPanel.Controls.Add((MetroLabel)param[1]);
         }
 
         private void shotBoundary_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -166,15 +177,21 @@ namespace CSC741M_MP2.View
                 picture.Image = Image.FromFile(path);
                 picture.Location = new Point(x, y);
                 picture.SizeMode = PictureBoxSizeMode.StretchImage;
-                x += picture.Width + 5;
-                keyframeWorker.ReportProgress(0, picture);
+                MetroLabel label = new MetroLabel();
+                label.Text = Path.GetFileName(path);
+                label.Location = new Point(x, y * 2 + picture.Height);
+                x += picture.Width + 10;
+                keyframeWorker.ReportProgress(0, new object[] { picture, label });
             }
         }
 
         private void keyframe_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            keyframePictureBoxes.Add((PictureBox)e.UserState);
-            keyframePanel.Controls.Add((PictureBox)e.UserState);
+            object[] param = (object[])e.UserState;
+            keyframePictureBoxes.Add((PictureBox)param[0]);
+            keyframeLabels.Add((MetroLabel)param[1]);
+            keyframePanel.Controls.Add((PictureBox)param[0]);
+            keyframePanel.Controls.Add((MetroLabel)param[1]);
         }
 
         private void keyframe_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -206,6 +223,8 @@ namespace CSC741M_MP2.View
             {
                 shotBoundaryPictureBoxes[i].Dispose();
                 shotBoundaryPictureBoxes.RemoveAt(i);
+                shotBoundaryLabels[i].Dispose();
+                shotBoundaryLabels.RemoveAt(i);
             }
         }
 
@@ -215,6 +234,8 @@ namespace CSC741M_MP2.View
             {
                 keyframePictureBoxes[i].Dispose();
                 keyframePictureBoxes.RemoveAt(i);
+                keyframeLabels[i].Dispose();
+                keyframeLabels.RemoveAt(i);
             }
         }
         #endregion
