@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            MetroFramework.Components.MetroToolTip metroToolTip1;
             this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager(this.components);
             this.filePathLabel = new MetroFramework.Controls.MetroLabel();
             this.inputBrowseButton = new MetroFramework.Controls.MetroButton();
@@ -51,6 +52,7 @@
             this.defaultSearchPathLabel = new MetroFramework.Controls.MetroLabel();
             this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
             this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            metroToolTip1 = new MetroFramework.Components.MetroToolTip();
             ((System.ComponentModel.ISupportInitialize)(this.metroStyleManager1)).BeginInit();
             this.metroTabs.SuspendLayout();
             this.metroTabPage1.SuspendLayout();
@@ -105,7 +107,7 @@
             this.metroTabs.Controls.Add(this.metroTabPage3);
             this.metroTabs.Location = new System.Drawing.Point(23, 63);
             this.metroTabs.Name = "metroTabs";
-            this.metroTabs.SelectedIndex = 0;
+            this.metroTabs.SelectedIndex = 1;
             this.metroTabs.Size = new System.Drawing.Size(679, 482);
             this.metroTabs.TabIndex = 3;
             // 
@@ -201,6 +203,7 @@
             this.postTransitionTextBox.Name = "postTransitionTextBox";
             this.postTransitionTextBox.Size = new System.Drawing.Size(291, 23);
             this.postTransitionTextBox.TabIndex = 9;
+            metroToolTip1.SetToolTip(this.postTransitionTextBox, "Max no. of average frame-to-frame difference\r\nbetween detected transitions.");
             // 
             // constantATextBox
             // 
@@ -208,6 +211,7 @@
             this.constantATextBox.Name = "constantATextBox";
             this.constantATextBox.Size = new System.Drawing.Size(291, 23);
             this.constantATextBox.TabIndex = 8;
+            metroToolTip1.SetToolTip(this.constantATextBox, "Influences camera break threshold");
             // 
             // metroLabel3
             // 
@@ -217,6 +221,7 @@
             this.metroLabel3.Size = new System.Drawing.Size(192, 19);
             this.metroLabel3.TabIndex = 7;
             this.metroLabel3.Text = "Post Transition Frame Tolerance";
+            metroToolTip1.SetToolTip(this.metroLabel3, "Max no. of average frame-to-frame difference\r\nbetween detected transitions.\r\n");
             // 
             // constantALabel
             // 
@@ -226,6 +231,7 @@
             this.constantALabel.Size = new System.Drawing.Size(113, 19);
             this.constantALabel.TabIndex = 6;
             this.constantALabel.Text = "Constant Value (a)";
+            metroToolTip1.SetToolTip(this.constantALabel, "Influences camera break threshold");
             // 
             // defaultSearchPathBrowseButton
             // 
@@ -251,6 +257,7 @@
             this.defaultSearchPathTextBox.Name = "defaultSearchPathTextBox";
             this.defaultSearchPathTextBox.Size = new System.Drawing.Size(291, 23);
             this.defaultSearchPathTextBox.TabIndex = 3;
+            metroToolTip1.SetToolTip(this.defaultSearchPathTextBox, "Initial query search directory");
             // 
             // defaultSearchPathLabel
             // 
@@ -260,6 +267,7 @@
             this.defaultSearchPathLabel.Size = new System.Drawing.Size(122, 19);
             this.defaultSearchPathLabel.TabIndex = 2;
             this.defaultSearchPathLabel.Text = "Default Search Path";
+            metroToolTip1.SetToolTip(this.defaultSearchPathLabel, "Initial query search directory");
             // 
             // metroTabPage3
             // 
