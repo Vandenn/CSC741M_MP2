@@ -141,7 +141,6 @@ namespace CSC741M_MP2.View
             {
                 PictureBox picture = new PictureBox();
                 picture.Image = Image.FromFile(path);
-                Console.WriteLine(path);
                 picture.Location = new Point(x, y);
                 picture.SizeMode = PictureBoxSizeMode.StretchImage;
                 MetroLabel label = new MetroLabel();

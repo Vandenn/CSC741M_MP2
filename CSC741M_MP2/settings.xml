@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?> 
 <settings>
   <defaultSearchPath>C:\</defaultSearchPath>
-  <constantAValue>6.0</constantAValue>
+  <constantAValue>7.0</constantAValue>
   <postTransitionFrameTolerance>5</postTransitionFrameTolerance>
 </settings>

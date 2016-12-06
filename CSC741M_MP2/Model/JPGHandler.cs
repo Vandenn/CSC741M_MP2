@@ -61,13 +61,19 @@ namespace CSC741M_MP2.Model
         public List<string> getShotBoundaries()
         {
             shotBoundaryPaths = new List<string>();
+            List<Dictionary<int, int>> histograms = new List<Dictionary<int, int>>();
             Dictionary<int, int> histogram1, histogram2;
             double[] differences = new double[imagePaths.Count - 1];
 
-            histogram1 = convertImage(imagePaths[0]);
-            for (int i = 1; i < imagePaths.Count; i++)
+            for (int i = 0; i < imagePaths.Count; i++)
             {
-                histogram2 = convertImage(imagePaths[i]);
+                histograms.Add(convertImage(imagePaths[i]));
+            }
+
+            histogram1 = histograms[0];
+            for (int i = 1; i < histograms.Count; i++)
+            {
+                histogram2 = histograms[i];
                 differences[i - 1] = getDifference(histogram1, histogram2);
                 histogram1 = histogram2;
                 ProgressUpdate((i / (imagePaths.Count - 1)) * 100);
@@ -78,10 +84,10 @@ namespace CSC741M_MP2.Model
             double differenceStandardDeviation = Math.Sqrt(sumOfSquaresOfDifferences / differences.Length);
             double breakThreshold = averageDifference + settings.constantAValue * differenceStandardDeviation;
             double transitionThreshold = averageDifference + differenceStandardDeviation;
-            int postTransitionShotsCtr = 0;
 
+            int postTransitionShotsCtr = 0;
             bool inTransition = false;
-            int possibleTransitionEndIndex = -1;
+            int possibleTransitionStartIndex = -1;
             shotBoundaryPaths.Add(imagePaths[0]);
             for (int i = 0; i < differences.Length; i++)
             {
@@ -94,39 +100,43 @@ namespace CSC741M_MP2.Model
                 {
                     if (!inTransition)
                     {
-                        shotBoundaryPaths.Add(imagePaths[i]);
+                        possibleTransitionStartIndex = i;
                         inTransition = true;
                     }
-                    else if (possibleTransitionEndIndex >= 0)
+                    else
                     {
-                        possibleTransitionEndIndex = -1;
                         postTransitionShotsCtr = 0;
                     }
                 }
                 else
                 {
-                    if (inTransition)
+                    if (inTransition && possibleTransitionStartIndex >= 0)
                     {
-                        if (postTransitionShotsCtr < settings.postTransitionFrameTolerance)
+                        bool resetTransition = false;
+
+                        if (getDifference(histograms[possibleTransitionStartIndex], histograms[i]) > breakThreshold &&
+                            postTransitionShotsCtr <= settings.postTransitionFrameTolerance)
                         {
-                            if (postTransitionShotsCtr == 0)
-                            {
-                                possibleTransitionEndIndex = i - 1;
-                            }
-                            postTransitionShotsCtr++;
+                            if (!shotBoundaryPaths.Contains(imagePaths[possibleTransitionStartIndex]))
+                                shotBoundaryPaths.Add(imagePaths[possibleTransitionStartIndex]);
+                            if (!shotBoundaryPaths.Contains(imagePaths[i]))
+                                shotBoundaryPaths.Add(imagePaths[i]);
+                            resetTransition = true;
+                        }
+                        else if (postTransitionShotsCtr > settings.postTransitionFrameTolerance)
+                        {
+                            resetTransition = true;
+                        }
+
+                        if (resetTransition)
+                        {
+                            possibleTransitionStartIndex = -1;
+                            postTransitionShotsCtr = 0;
+                            inTransition = false;
                         }
                         else
                         {
-                            if (possibleTransitionEndIndex >= 0)
-                            {
-                                if (!shotBoundaryPaths.Contains(imagePaths[possibleTransitionEndIndex]))
-                                    shotBoundaryPaths.Add(imagePaths[possibleTransitionEndIndex]);
-                                else //Remove single frame "transitions"
-                                    shotBoundaryPaths.Remove(imagePaths[possibleTransitionEndIndex]);
-                                possibleTransitionEndIndex = -1;
-                            }
-                            inTransition = false;
-                            postTransitionShotsCtr = 0;
+                            postTransitionShotsCtr++;
                         }
                     }
                 }
@@ -138,7 +148,7 @@ namespace CSC741M_MP2.Model
                 shotBoundaryPaths.Add(imagePaths[imagePaths.Count - 1]);
 
             ProgressUpdate(100);
-            shotBoundaryPaths.Sort();
+            //shotBoundaryPaths.Sort();
             return shotBoundaryPaths;
         }
 
@@ -171,7 +181,7 @@ namespace CSC741M_MP2.Model
 
                 keyframePaths.Add(aveHistogram);
 
-                ProgressUpdate(i / (shotBoundaries.Count - 2) * 100);
+                ProgressUpdate((i + 1) / (shotBoundaries.Count - 1) * 100);
             }
             
             
@@ -220,7 +230,6 @@ namespace CSC741M_MP2.Model
                     imagePath = key;
                 }
             }
-            Console.WriteLine(imagePath);
 
             return imagePath;
         }
