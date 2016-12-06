@@ -148,7 +148,8 @@ namespace CSC741M_MP2.Model
                 shotBoundaryPaths.Add(imagePaths[imagePaths.Count - 1]);
 
             ProgressUpdate(100);
-            //shotBoundaryPaths.Sort();
+            shotBoundaryPaths = shotBoundaryPaths.Distinct().ToList();
+            shotBoundaryPaths.Sort();
             return shotBoundaryPaths;
         }
 
